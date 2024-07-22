@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const methodOverride = require('method-override')
 
 const { engine } = require('express-handlebars')
 
@@ -14,6 +15,8 @@ app.set('views', './views')
 
 // 設置靜態文件目錄
 app.use(express.static('public'));
+app.use(express.urlencoded({ extended: true })); // 解析表單數據
+app.use(methodOverride('_method'))
 
 app.get('/', (req, res) => {
   return Restaurant.findAll({
@@ -22,7 +25,6 @@ app.get('/', (req, res) => {
   })
     .then((restaurants) => res.render('index', { restaurants }))
     .catch((err) => res.status(422.).json(err))
-  res.render('index')
 })
 
 app.get('/restaurant-list', (req, res) => {
@@ -41,12 +43,32 @@ app.get('/restaurant-list/:id', (req, res) => {
     .catch((err) => res.status(422).json(err))
 })
 
+app.get('/restaurant-list/:id/edit', (req, res) => {
+  const id = req.params.id
+  return Restaurant.findByPk(id, {
+    attributes: ['id', 'name', 'category', 'image', 'phone', 'location', 'description'],
+    raw: true
+  })
+  .then((restaurant) => res.render('edit', { restaurant }))
+})
+
 app.post('/restaurant-list/new', (req, res) => {
   res.send('add new restaurant')
 })
 
-app.put('/restaurant-list/:id/edit', (req, res) => {
-  res.send('modify restaurant')
+app.put('/restaurant-list/:id', (req, res) => {
+
+  const body = req.body
+  const id = req.params.id
+  
+  return Restaurant.update({
+    name: body.name,
+    location: body.location,
+    phone: body.phone,
+    description: body.description,
+    image: body.image
+  }, { where: { id } })
+  .then(() => res.redirect(`/restaurant-list/${id}`))
 })
 
 app.delete('/restaurant-list/:id', (req, res) => {

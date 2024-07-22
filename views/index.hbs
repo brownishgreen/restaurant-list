@@ -36,10 +36,12 @@
             </div>
             <div class="button-container">
               <a href="/restaurant-list/{{restaurant.id}}" class="btn btn-outline-success btn-sm">Detail</a>
-              <form action=""><a href="/restaurant-list/{{restaurant.id}}"
-                  class="btn btn-outline-warning btn-sm">Edit</a></form>
-              <form action=""><a href="/restaurant-list/{{restaurant.id}}"
-                  class="btn btn-outline-secondary btn-sm">Delete</a></form>
+              <a href="/restaurant-list/{{restaurant.id}}/edit" class="btn btn-outline-warning btn-sm">Edit</a>
+              
+
+              <form action="/restaurant-list/{{restaurant.id}}?_method=DELETE" method="POST">
+                <button class="btn btn-outline-secondary btn-sm">Delete</button>
+              </form>
             </div>
 
 

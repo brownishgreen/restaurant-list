@@ -87,6 +87,7 @@ header {
   display: flex;
   justify-content: flex-end
 }
+
 .button-container .btn {
   margin-left: 10px;
   /* 調整此值來改變按鈕之間的間距 */
@@ -113,3 +114,38 @@ header {
   }
 
 }
+
+.form-body {
+
+  display: flex;
+  justify-content: center;
+  /* 水平置中 */
+  align-items: center;
+  /* 垂直置中 */
+  height: 100vh;
+  /* 使容器高度為視窗高度 */
+  width: 100%;
+  height: 100%;
+  background-color: #c4b9b6;
+}
+
+.form-wrapper {
+
+  width: 65%;
+  background-color: #dbcec3;
+  /* 背景顏色 */
+  padding: 2rem;
+  /* 內邊距 */
+  border-radius: 0.5rem;
+  /* 圓角邊框 */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  /* 陰影效果 */
+
+}
+.form-control {
+  width: 70%;
+  /* 設定為父容器寬度的 80% */
+  margin-bottom: 1rem;
+  /* 控制輸入框之間的間距 */
+}
+
