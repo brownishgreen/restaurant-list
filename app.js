@@ -28,9 +28,11 @@ app.get('/', (req, res) => {
 })
 
 app.get('/restaurant-list', (req, res) => {
-  return Restaurant.findAll()
-    .then((restaurants) => res.send({ restaurants }))
-    .catch((err) => res.status(422).json(err))
+  res.redirect('/')
+})
+
+app.get('/restaurant-list/new', (req, res) => {
+  res.render('new')
 })
 
 app.get('/restaurant-list/:id', (req, res) => {
@@ -46,10 +48,24 @@ app.get('/restaurant-list/:id', (req, res) => {
 app.get('/restaurant-list/:id/edit', (req, res) => {
   const id = req.params.id
   return Restaurant.findByPk(id, {
-    attributes: ['id', 'name', 'category', 'image', 'phone', 'location', 'description'],
+    attributes: ['id', 'name', 'category', 'image', 'phone', 'location', 'description','rating'],
     raw: true
   })
   .then((restaurant) => res.render('edit', { restaurant }))
+})
+
+app.post('/restaurant-list', (req, res) => {
+  const body = req.body
+  return Restaurant.create({
+    name: body.name,
+    category: body.category,
+    location: body.location,
+    phone: body.phone,
+    description: body.description,
+    image: body.image
+  })
+    .then(() => res.redirect('/restaurant-list'))
+  .catch((err) => console.log(err))
 })
 
 
@@ -63,7 +79,8 @@ app.put('/restaurant-list/:id', (req, res) => {
     location: body.location,
     phone: body.phone,
     description: body.description,
-    image: body.image
+    image: body.image,
+    rating: body.rating
   }, { where: { id } })
   .then(() => res.redirect(`/restaurant-list/${id}`))
 })
