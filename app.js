@@ -52,15 +52,12 @@ app.get('/restaurant-list/:id/edit', (req, res) => {
   .then((restaurant) => res.render('edit', { restaurant }))
 })
 
-app.post('/restaurant-list/new', (req, res) => {
-  res.send('add new restaurant')
-})
 
 app.put('/restaurant-list/:id', (req, res) => {
 
   const body = req.body
   const id = req.params.id
-  
+
   return Restaurant.update({
     name: body.name,
     location: body.location,
@@ -72,7 +69,9 @@ app.put('/restaurant-list/:id', (req, res) => {
 })
 
 app.delete('/restaurant-list/:id', (req, res) => {
-  res.send('delete restaurant')
+  const id = req.params.id
+  return Restaurant.destroy({ where: { id } })
+  .then(() => res.redirect('/'))
 })
 
 app.listen(port, () => {
