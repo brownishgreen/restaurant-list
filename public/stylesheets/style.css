@@ -64,6 +64,11 @@ header {
   white-space: nowrap;
 }
 
+.card-title .badge {
+  margin-left: 10px;
+  /* 調整此值來改變間距 */
+}
+
 .restaurant-category {
   color: #666666;
   font-size: 0.8rem;
@@ -76,6 +81,15 @@ header {
   text-align: center;
   font-size: 3rem;
   text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end
+}
+.button-container .btn {
+  margin-left: 10px;
+  /* 調整此值來改變按鈕之間的間距 */
 }
 
 @media screen and (max-width: 992px) {
