@@ -1,4 +1,6 @@
 const express = require('express')
+const flash = require('connect-flash')
+const session = require('express-session')
 const app = express()
 const methodOverride = require('method-override')
 
@@ -18,17 +20,24 @@ app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true })); // 解析表單數據
 app.use(methodOverride('_method'))
 
+app.use(session({
+  secret: 'ThisIsSecret',
+  resave: false,
+  saveUninitialized: false
+}))
+app.use(flash())
+
 app.get('/', (req, res) => {
+  res.redirect('/restaurant-list')
+})
+
+app.get('/restaurant-list', (req, res) => {
   return Restaurant.findAll({
     attributes: ['id', 'name', 'category', 'image', 'rating'],
     raw: true
   })
-    .then((restaurants) => res.render('index', { restaurants }))
+    .then((restaurants) => res.render('index', { restaurants, message: req.flash('success')}))
     .catch((err) => res.status(422.).json(err))
-})
-
-app.get('/restaurant-list', (req, res) => {
-  res.redirect('/')
 })
 
 app.get('/restaurant-list/new', (req, res) => {
@@ -41,17 +50,17 @@ app.get('/restaurant-list/:id', (req, res) => {
     attributes: ['id', 'name', 'category', 'image', 'phone', 'location', 'description'],
     raw: true
   })
-    .then((restaurant) => res.render('detail', { restaurant }))
+    .then((restaurant) => res.render('detail', { restaurant, message: req.flash('success') }))
     .catch((err) => res.status(422).json(err))
 })
 
 app.get('/restaurant-list/:id/edit', (req, res) => {
   const id = req.params.id
   return Restaurant.findByPk(id, {
-    attributes: ['id', 'name', 'category', 'image', 'phone', 'location', 'description','rating'],
+    attributes: ['id', 'name', 'category', 'image', 'phone', 'location', 'description', 'rating'],
     raw: true
   })
-  .then((restaurant) => res.render('edit', { restaurant }))
+    .then((restaurant) => res.render('edit', { restaurant }))
 })
 
 app.post('/restaurant-list', (req, res) => {
@@ -64,8 +73,11 @@ app.post('/restaurant-list', (req, res) => {
     description: body.description,
     image: body.image
   })
-    .then(() => res.redirect('/restaurant-list'))
-  .catch((err) => console.log(err))
+    .then(() => {
+      req.flash('success', '新增成功!')
+      return res.redirect('/restaurant-list')
+    })
+    .catch((err) => console.log(err))
 })
 
 
@@ -82,13 +94,19 @@ app.put('/restaurant-list/:id', (req, res) => {
     image: body.image,
     rating: body.rating
   }, { where: { id } })
-  .then(() => res.redirect(`/restaurant-list/${id}`))
+    .then(() => {
+      req.flash('success', '編輯成功!')
+      return res.redirect(`/restaurant-list/${id}`)
+    })
 })
 
 app.delete('/restaurant-list/:id', (req, res) => {
   const id = req.params.id
   return Restaurant.destroy({ where: { id } })
-  .then(() => res.redirect('/'))
+    .then(() => {
+      req.flash('success', '刪除成功!')
+      return res.redirect('/')
+    })
 })
 
 app.listen(port, () => {
