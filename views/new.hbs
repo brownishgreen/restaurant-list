@@ -3,6 +3,9 @@
     <div class="form-wrapper">
       <form action="/restaurant-list" method="POST">
         <div class="mb-2">
+          {{#if error}}
+          <div>{{error}}</div>
+          {{/if}}
           <label for="name" class="form-label">餐廳名稱</label>
           <input type="text" class="form-control" id="name" name="name">
         </div>
