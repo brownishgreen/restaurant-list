@@ -9,6 +9,10 @@ const router = require('./routes')
 const messageHandler = require('./middlewares/message-handler')
 const errorHandler = require('./middlewares/error-handler')
 const app = express()
+
+if (process.env.NODE_ENV === 'development') {
+  require('dotenv').config()
+}
 const port = 3000
 
 app.engine('.hbs', engine({ extname: '.hbs' }))
@@ -21,7 +25,7 @@ app.use(express.urlencoded({ extended: true })); // 解析表單數據
 app.use(methodOverride('_method'))
 
 app.use(session({
-  secret: 'ThisIsSecret',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false
 }))
