@@ -1,14 +1,14 @@
 const express = require('express')
-const flash = require('connect-flash')
 const session = require('express-session')
-const app = express()
-
-
+const flash = require('connect-flash')
+const bodyParser = require('body-parser')
 const { engine } = require('express-handlebars')
 const methodOverride = require('method-override')
 
 const router = require('./routes')
-
+const messageHandler = require('./middlewares/message-handler')
+const errorHandler = require('./middlewares/error-handler')
+const app = express()
 const port = 3000
 
 app.engine('.hbs', engine({ extname: '.hbs' }))
@@ -27,8 +27,12 @@ app.use(session({
 }))
 app.use(flash())
 
-app.use('/', router)
+app.use(bodyParser.json({ limit: '10mb' })); // 將限制增加到 10MB，根據需要調整
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
+app.use(messageHandler)
+app.use(router)
+app.use(errorHandler)
 
 
 app.listen(port, () => {

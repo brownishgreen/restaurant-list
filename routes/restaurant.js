@@ -9,12 +9,12 @@ router.get('/', (req, res) => {
     attributes: ['id', 'name', 'category', 'image', 'rating'],
     raw: true
   })
-    .then((restaurants) => res.render('index', { restaurants, message: req.flash('success'), error: req.flash('error') }))
+    .then((restaurants) => res.render('index', { restaurants, error: req.flash('error') }))
     .catch((err) => res.status(422.).json(err))
 })
 
 router.get('/new', (req, res) => {
-  res.render('new')
+  return res.render('new')
 })
 
 router.get('/:id', (req, res) => {
@@ -23,7 +23,7 @@ router.get('/:id', (req, res) => {
     attributes: ['id', 'name', 'category', 'image', 'phone', 'location', 'description'],
     raw: true
   })
-    .then((restaurant) => res.render('detail', { restaurant, message: req.flash('success'), error: req.flash('error') }))
+    .then((restaurant) => res.render('detail', { restaurant, error: req.flash('error') }))
     .catch((err) => res.status(422).json(err))
 })
 
@@ -36,8 +36,7 @@ router.get('/:id/edit', (req, res) => {
     .then((restaurant) => res.render('edit', { restaurant, error: req.flash('error') }))
 })
 
-router.post('/', (req, res) => {
-  try {
+router.post('/', (req, res, next) => {
     const body = req.body
     return Restaurant.create({
       name: body.name,
@@ -51,68 +50,47 @@ router.post('/', (req, res) => {
         req.flash('success', '新增成功!')
         return res.redirect('/restaurant-list')
       })
-      .catch((err) => {
-        console.log(err)
-        req.flash('error', '新增失敗!')
-        return res.redirect('/restaurant-list')
+      .catch((error) => {
+        error.errorMessage = '新增失敗!'
+        next(error)
       })
-  } catch (error) {
-    console.log(err)
-    req.flash('error', '新增失敗!')
-    return res.redirect('/estaurant-list')
-  }
+  })
+
+
+router.put('/:id', (req, res, next) => {
+
+  const body = req.body
+  const id = req.params.id
+
+  return Restaurant.update({
+    name: body.name,
+    location: body.location,
+    phone: body.phone,
+    description: body.description,
+    image: body.image,
+    rating: body.rating
+  }, { where: { id } })
+    .then(() => {
+      req.flash('success', '編輯成功!')
+      return res.redirect(`/restaurant-list/${id}`)
+    })
+    .catch((error) => {
+      error.errorMessage = '編輯失敗!'
+      next(error)
+    })
 })
 
-
-router.put('/:id', (req, res) => {
-
-  try {
-    const body = req.body
-    const id = req.params.id
-
-    return Restaurant.update({
-      name: body.name,
-      location: body.location,
-      phone: body.phone,
-      description: body.description,
-      image: body.image,
-      rating: body.rating
-    }, { where: { id } })
-      .then(() => {
-        req.flash('success', '編輯成功!')
-        return res.redirect(`/restaurant-list/${id}`)
-      })
-      .catch((err) => {
-        console.log(err)
-        req.flash('error', '編輯失敗!')
-        return res.redirect('back')
-      })
-  } catch (error) {
-    console.log(err)
-    req.flash('error', '編輯失敗!')
-    return res.redirect('back')
-
-  }
-})
-
-router.delete('/:id', (req, res) => {
-  try {
+router.delete('/:id', (req, res, next) => {
     const id = req.params.id
     return Restaurant.destroy({ where: { id } })
       .then(() => {
         req.flash('success', '刪除成功!')
-        return res.redirect('/')
+        return res.redirect('/restaurant-list')
       })
-      .catch(() => {
-        console.log(err)
-        req.flash('error', '刪除失敗!')
-        return res.redirect('back')
+      .catch((error) => {
+        error.errorMessage = '刪除失敗!'
+        next(error)
       })
-  } catch (error) {
-    console.log(err)
-    req.flash('error', '刪除失敗!')
-    return res.redirect('back')
-  }
-})
+  })
 
 module.exports = router
