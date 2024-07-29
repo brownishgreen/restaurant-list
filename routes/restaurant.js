@@ -5,34 +5,29 @@ const db = require('../models')
 const Restaurant = db.Restaurant
 
 router.get('/', (req, res, next) => {
-  const keyword = req.query.search || '';
-  const page = parseInt(req.query.page) || 1;
-  const limit = 9;
+  const page = parseInt(req.query.page) || 1
+  const limit = 9
 
   Restaurant.findAll({
     attributes: ['id', 'name', 'category', 'image', 'rating', 'description'],
+    offset: (page - 1) * limit,
+    limit,
     raw: true
   })
     .then((restaurants) => {
-      const matchedRestaurants = restaurants.filter(rt => {
-        const nameMatch = rt.name.toLowerCase().includes(keyword.toLowerCase());
-        const categoryMatch = rt.category.toLowerCase().includes(keyword.toLowerCase());
-        const descriptionMatch = rt.description.toLowerCase().includes(keyword.toLowerCase());
-        return nameMatch || categoryMatch || descriptionMatch;
-      });
       res.render('index', {
-        restaurants: matchedRestaurants.slice((page - 1) * limit, page * limit),
-        keyword,
+        restaurants,
         prev: page > 1 ? page - 1 : page,
-        next: page * limit < matchedRestaurants.length ? page + 1 : page,
+        next: page * limit? page + 1 : page,
         page
       });
     })
     .catch((error) => {
       error.errorMessage = '資料取得失敗:(';
       next(error);
-    });
-});
+    })
+})
+
 
   router.get('/new', (req, res, next) => {
     return res.render('new')
