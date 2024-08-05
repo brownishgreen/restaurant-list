@@ -4,6 +4,7 @@ const flash = require('connect-flash')
 const bodyParser = require('body-parser')
 const { engine } = require('express-handlebars')
 const methodOverride = require('method-override')
+const passport = require('passport')
 
 const router = require('./routes')
 const messageHandler = require('./middlewares/message-handler')
@@ -23,7 +24,7 @@ app.set('views', './views')
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true })); // 解析表單數據
 app.use(methodOverride('_method'))
-
+app.use(passport.initialize())
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,

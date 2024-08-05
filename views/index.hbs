@@ -2,13 +2,13 @@
 <div class="container search-bar">
   <div class="search-bar-outer">
     <div class="search-bar-inner">
-      <form action="restaurant-list">
+      <form action="restaurant-list" id="search-form">
         <h4 class="mb-2">尋找餐廳：</h4>
-        <div class="row">
-          <div class="col-9">
+        <div class="row align-items-center">
+          <div class="col-8">
             <div class="input-group">
               <input type="text" name="keyword" class="form-control" placeholder="輸入餐廳、分類"
-                aria-label="Restaurant Name..." value="{{keyword}}" aria-describedby="search-button">
+                aria-label="Restaurant Name..." value="{{keyword}}" aria-describedby="search-button"  id="search-input">
               <div class="input-group-append">
                 <button class="btn btn-major" type="submit" id="search-button">
                   <i class="fas fa-search"></i> Search
@@ -16,8 +16,8 @@
               </div>
             </div>
           </div>
-          <div class="col-3 d-flex align-items-center">
-            <a href="/restaurant-list/new" class="create-btn btn btn-secondary btn-sm">Add New Restaurant</a>
+          <div class="col-4 d-flex justify-content-end">
+            <a href="/restaurant-list/new" class="create-btn btn btn-warning btn-sm mb-3">Add New Restaurant</a>
           </div>
         </div>
       </form>
@@ -81,3 +81,4 @@
       </li>
     </ul>
   </nav>
+
