@@ -33,10 +33,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING
     },
-    confirmPassword: {
-      allowNull: false,
-      type: DataTypes.STRING
-    },
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE,

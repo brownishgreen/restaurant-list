@@ -26,6 +26,11 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, (username, password, 
     })
 }))
 
+passport.serializeUser((user, done) => {
+  const { id, name, email } = user
+  return done(null, {id , name, email})
+})
+
 const restaurant = require('./restaurant')
 
 router.use('/restaurant-list', restaurant)
@@ -43,9 +48,11 @@ router.get('/login', (req, res) => {
   return res.render('login')
 })
 
-router.post('/login', (req, res) => {
-  return res.send(req.body)
-})
+router.post('/login', passport.authenticate('local', {
+  successRedirect: '/restaurant-list',
+  failureRedirect: '/login',
+  failureFlash: true
+}))
 
 router.post('/logout', (req, res) => {
   return res.send('logout')

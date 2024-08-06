@@ -6,7 +6,8 @@ const User = db.User
 
 router.post('/', (req, res, next) => {
   const { email, name, password, confirmPassword } = req.body
-  if (!email || password) {
+
+  if (!email || !password) {
     req.flash('error', 'email 及 password 為必填欄位')
     return res.redirect('back')
   }
