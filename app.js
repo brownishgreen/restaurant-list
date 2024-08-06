@@ -24,7 +24,7 @@ app.set('views', './views')
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true })); // 解析表單數據
 app.use(methodOverride('_method'))
-app.use(passport.initialize())
+
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
@@ -34,6 +34,9 @@ app.use(flash())
 
 app.use(bodyParser.json({ limit: '10mb' })); // 將限制增加到 10MB，根據需要調整
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
+
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.use(messageHandler)
 app.use(router)

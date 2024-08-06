@@ -6,10 +6,10 @@ const Restaurant = db.Restaurant
 
 
 
-
 router.get('/', (req, res, next) => {
   const page = parseInt(req.query.page) || 1
   const limit = 9
+
 
   Restaurant.findAll({
     attributes: ['id', 'name', 'category', 'image', 'rating', 'description'],

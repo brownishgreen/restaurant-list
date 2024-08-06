@@ -31,9 +31,14 @@ passport.serializeUser((user, done) => {
   return done(null, {id , name, email})
 })
 
-const restaurant = require('./restaurant')
+passport.deserializeUser((user, done) => {
+  done(null, {id: user.id })
+})
 
-router.use('/restaurant-list', restaurant)
+const restaurant = require('./restaurant')
+const authHandler = require('../middlewares/auth-handler')
+
+router.use('/restaurant-list', authHandler, restaurant)
 router.use('/users', users)
 
 router.get('/', (req, res) => {
@@ -55,7 +60,12 @@ router.post('/login', passport.authenticate('local', {
 }))
 
 router.post('/logout', (req, res) => {
-  return res.send('logout')
+  req.logout((error) => {
+    if (error) {
+      next(error)
+    }
+    return res.redirect('/login')
+  })
 })
 
 module.exports = router
