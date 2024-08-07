@@ -5,6 +5,8 @@ const bodyParser = require('body-parser')
 const { engine } = require('express-handlebars')
 const methodOverride = require('method-override')
 const passport = require('passport')
+require('dotenv').config();
+
 
 const router = require('./routes')
 const messageHandler = require('./middlewares/message-handler')
