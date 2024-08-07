@@ -4,7 +4,7 @@ const flash = require('connect-flash')
 const bodyParser = require('body-parser')
 const { engine } = require('express-handlebars')
 const methodOverride = require('method-override')
-const passport = require('passport')
+
 require('dotenv').config();
 
 
@@ -16,6 +16,7 @@ const app = express()
 if (process.env.NODE_ENV === 'development') {
   require('dotenv').config()
 }
+const passport = require('./config/passport')
 const port = 3000
 
 app.engine('.hbs', engine({ extname: '.hbs' }))
