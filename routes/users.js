@@ -24,7 +24,8 @@ router.post('/', (req, res, next) => {
         req.flash('error', 'email已註冊')
         return
       }
-      return User.create({ email, name, password })
+      return bcrypt.hash(password, 10)
+        .then((hash) => User.create({ email, name, password: hash }))
     })
     .then((user) => {
       if (!user) {

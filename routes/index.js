@@ -9,7 +9,11 @@ const bcrypt = require('bcryptjs')
 const db = require('../models')
 const User = db.User
 
-passport.use(new LocalStrategy({ usernameField: 'email' }, (username, password, done) => {
+passport.use(new LocalStrategy(
+  {
+    usernameField: 'email',
+    passwordField: 'password'
+  }, (username, password, done) => {
   return User.findOne({
     attributes: ['id', 'name', 'email', 'password'],
     where: { email: username },

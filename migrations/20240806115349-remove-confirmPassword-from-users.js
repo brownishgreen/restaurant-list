@@ -2,11 +2,11 @@
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
- await queryInterface.removeColumn('Users', 'confirmPassword')
+  async up(queryInterface, Sequelize) {
+    await queryInterface.removeColumn('Users', 'confirmPassword')
   },
 
-  async down (queryInterface, Sequelize) {
+  async down(queryInterface, Sequelize) {
     await queryInterface.addColumn('Users', 'confirmPassword', {
       type: Sequelize.STRING,
       allowNull: false
