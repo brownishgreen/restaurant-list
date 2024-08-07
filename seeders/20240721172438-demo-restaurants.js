@@ -10,7 +10,7 @@ module.exports = {
       console.log('Data from JSON file:', data.results); // 輸出日誌以檢查資料
 
       // 插入資料到 Restaurants 表中
-      await queryInterface.bulkInsert('Restaurants', data.results, {});
+      await queryInterface.bulkInsert('Restaurants', data.results, {})
     } catch (error) {
       console.error('Error reading or inserting data:', error);
     }
