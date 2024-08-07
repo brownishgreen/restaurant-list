@@ -4,15 +4,18 @@ const router = express.Router()
 const db = require('../models')
 const Restaurant = db.Restaurant
 
+const authHandler = require('../middlewares/auth-handler')
+router.use(authHandler)
 
 
 router.get('/', (req, res, next) => {
   const page = parseInt(req.query.page) || 1
   const limit = 9
-
+  const userId = req.user.id
 
   Restaurant.findAll({
     attributes: ['id', 'name', 'category', 'image', 'rating', 'description'],
+    where: { userId}, 
     offset: (page - 1) * limit,
     limit,
     raw: true
