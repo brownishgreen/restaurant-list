@@ -5,6 +5,9 @@ const bodyParser = require('body-parser')
 const { engine } = require('express-handlebars')
 const methodOverride = require('method-override')
 
+require('dotenv').config();
+
+
 const router = require('./routes')
 const messageHandler = require('./middlewares/message-handler')
 const errorHandler = require('./middlewares/error-handler')
@@ -13,6 +16,7 @@ const app = express()
 if (process.env.NODE_ENV === 'development') {
   require('dotenv').config()
 }
+const passport = require('./config/passport')
 const port = 3000
 
 app.engine('.hbs', engine({ extname: '.hbs' }))
@@ -33,6 +37,9 @@ app.use(flash())
 
 app.use(bodyParser.json({ limit: '10mb' })); // 將限制增加到 10MB，根據需要調整
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
+
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.use(messageHandler)
 app.use(router)
