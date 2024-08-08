@@ -3,13 +3,11 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    // 讀取 JSON 文件
     const fs = require('fs');
     const path = require('path');
-    const filePath = path.join(__dirname, '../seeders/restaurant.json');
+    const filePath = path.join(__dirname, '../seeders/restaurant (2).json'); // 更新為新的檔案名稱
     const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
 
-    // 提取資料
     const restaurants = data.results.map((restaurant, index) => ({
       id: restaurant.id,
       name: restaurant.name,
@@ -26,12 +24,10 @@ module.exports = {
       updatedAt: new Date()
     }));
 
-    // 插入資料
     await queryInterface.bulkInsert('Restaurants', restaurants, {});
   },
 
   async down(queryInterface, Sequelize) {
-    // 刪除資料
     await queryInterface.bulkDelete('Restaurants', null, {});
   }
 };

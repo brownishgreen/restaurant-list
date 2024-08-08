@@ -4,6 +4,7 @@ const passport = require('passport')
 
 const db = require('../models')
 const Restaurant = db.Restaurant
+const User = db.User
 
 const authHandler = require('../middlewares/auth-handler')
 router.use(authHandler)
@@ -60,6 +61,7 @@ router.get('/:id/edit', (req, res) => {
 })
 
 router.post('/', (req, res, next) => {
+  const userId = req.user.id
   const body = req.body
   return Restaurant.create({
     name: body.name,
@@ -68,7 +70,8 @@ router.post('/', (req, res, next) => {
     phone: body.phone,
     description: body.description,
     image: body.image,
-    rating: body.rating
+    rating: body.rating,
+    userId: userId
   })
     .then(() => {
       req.flash('success', '新增成功!')
