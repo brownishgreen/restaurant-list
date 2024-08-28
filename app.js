@@ -4,12 +4,26 @@ const { engine } = require('express-handlebars')
 
 const port = 3000
 
+const db = require('./models')
+const Restaurant = db.Restaurant
+
 app.engine('.hbs', engine({ extname: '.hbs' }))
 app.set('view engine', '.hbs')
 app.set('views', './views')
 
+app.use(express.static('public'))
+
 app.get('/', (req, res) => {
-  res.render('index')
+  Restaurant.findAll({
+    attributes: ['id', 'name', 'category', 'image', 'rating', 'description'],
+    raw: true
+  })
+    .then((restaurants) => {
+      res.render('index', { restaurants })
+    })
+    .catch((error) => {
+    console.log(error)
+  })
 })
 
 app.get('/restaurant-list', (req, res) => {

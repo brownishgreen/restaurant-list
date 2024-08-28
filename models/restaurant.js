@@ -14,7 +14,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Restaurant.init({
-    id: DataTypes.INTEGER,
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,  // 自動遞增
+      primaryKey: true      // 設為主鍵
+    },
     name: DataTypes.STRING,
     name_en: DataTypes.STRING,
     category: DataTypes.STRING,

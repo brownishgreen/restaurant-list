@@ -1,0 +1,155 @@
+header {
+  overflow: hidden;
+}
+
+.navbar .navbar-brand {
+  color: #4592af;
+}
+
+.navbar .navbar-brand:hover {
+  color: #226089;
+}
+
+.banner {
+  position: relative;
+  z-index: -1;
+  margin: -5px;
+  height: 360px;
+  background: #dddddd center center url('https://assets-lighthouse.s3.amazonaws.com/uploads/image/file/5720/restaurants-list-cover.jpg');
+  background-size: cover;
+  filter: blur(3px);
+}
+
+.search-bar .search-bar-outer {
+  margin: 0 auto;
+  max-width: 680px;
+  background-color: #fce2cf;
+  border-radius: 8px;
+  padding: 20px 30px;
+  border: 0;
+  margin-top: -60px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.search-bar .search-bar-inner h4 {
+  color: #9b4b4b;
+}
+
+.form-control::placeholder {
+  color: #aaaaaa;
+  font-size: 0.8rem;
+}
+
+.btn-major {
+  background-color: #9b4b4b;
+  color: white;
+}
+
+.form-control:focus {
+  box-shadow: none;
+  border-color: #ced4da;
+}
+
+.card {
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card img {
+  height: 180px;
+}
+
+.card-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-title .badge {
+  margin-left: 10px;
+  /* 調整此值來改變間距 */
+}
+
+.restaurant-category {
+  color: #666666;
+  font-size: 0.8rem;
+}
+
+.restaurant-show-title {
+  position: relative;
+  top: -100px;
+  color: white;
+  text-align: center;
+  font-size: 3rem;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end
+}
+
+.button-container .btn {
+  margin-left: 10px;
+  /* 調整此值來改變按鈕之間的間距 */
+}
+
+@media screen and (max-width: 992px) {
+
+  .card img {
+    height: 115px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+
+  .restaurant-show-title {
+    font-size: 2rem;
+  }
+}
+
+@media screen and (max-width: 575px) {
+
+  .card img {
+    height: auto;
+  }
+
+}
+
+.form-body {
+
+  display: flex;
+  justify-content: center;
+  /* 水平置中 */
+  align-items: center;
+  /* 垂直置中 */
+  height: 100vh;
+  /* 使容器高度為視窗高度 */
+  width: 100%;
+  height: 100%;
+  background-color: #c4b9b6;
+}
+
+.form-wrapper {
+
+  width: 65%;
+  background-color: #dbcec3;
+  /* 背景顏色 */
+  padding: 2rem;
+  /* 內邊距 */
+  border-radius: 0.5rem;
+  /* 圓角邊框 */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  /* 陰影效果 */
+
+}
+
+.form-control {
+  width: 70%;
+  /* 設定為父容器寬度的 80% */
+  margin-bottom: 1rem;
+  /* 控制輸入框之間的間距 */
+}
+
+.create-btn {
+  margin-top: 0 cm;
+}
