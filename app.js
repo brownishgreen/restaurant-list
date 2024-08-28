@@ -14,6 +14,10 @@ app.set('views', './views')
 app.use(express.static('public'))
 
 app.get('/', (req, res) => {
+  res.redirect('/restaurant-list')
+})
+
+app.get('/restaurant-list', (req, res) => {
   Restaurant.findAll({
     attributes: ['id', 'name', 'category', 'image', 'rating', 'description'],
     raw: true
@@ -22,18 +26,19 @@ app.get('/', (req, res) => {
       res.render('index', { restaurants })
     })
     .catch((error) => {
-    console.log(error)
-  })
-})
-
-app.get('/restaurant-list', (req, res) => {
-  res.send('listing restaurants')
+      console.log(error)
+    })
 })
 
 app.get('/restaurant-list/:id', (req, res) => {
-  res.send('individual restaurant detail page')
+  const id = req.params.id
+  return Restaurant.findByPk(id, {
+    attributes: ['id', 'name', 'category', 'image', 'phone', 'location', 'description'],
+    raw: true
+  })
+    .then((restaurant) => res.render('detail', { restaurant }))
+    .catch((err) => res.status(422).json(err))
 })
-
 app.get('/restaurant-list/new', (req, res) => {
   res.send('add restaurant')
 })
