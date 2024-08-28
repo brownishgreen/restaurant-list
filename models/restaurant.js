@@ -1,14 +1,8 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Restaurant extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
       // define association here
     }
@@ -16,21 +10,34 @@ module.exports = (sequelize, DataTypes) => {
   Restaurant.init({
     id: {
       type: DataTypes.INTEGER,
-      autoIncrement: true,  // 自動遞增
-      primaryKey: true      // 設為主鍵
+      autoIncrement: true,
+      primaryKey: true
     },
-    name: DataTypes.STRING,
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false // 确保此字段不能为空
+    },
     name_en: DataTypes.STRING,
-    category: DataTypes.STRING,
+    category: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     image: DataTypes.STRING,
     location: DataTypes.STRING,
     phone: DataTypes.STRING,
     google_map: DataTypes.STRING,
-    rating: DataTypes.FLOAT,
+    rating: {
+      type: DataTypes.FLOAT,
+      validate: {
+        min: 0, 
+        max: 5
+      }
+    },
     description: DataTypes.TEXT
   }, {
     sequelize,
     modelName: 'Restaurant',
+    timestamps: true
   });
   return Restaurant;
 };

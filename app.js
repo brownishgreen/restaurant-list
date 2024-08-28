@@ -44,7 +44,13 @@ app.get('/restaurant-list/new', (req, res) => {
 })
 
 app.get('/restaurant-list/:id/edit', (req, res) => {
-  res.send(`edit restaurant ${id}`)
+  const id = req.params.id
+  return Restaurant.findByPk(id, {
+    attributes: ['id', 'name', 'category', 'image', 'phone', 'location', 'description'],
+    raw: true
+  })
+    .then((restaurant) => res.render('edit', { restaurant }))
+  .catch((err)=> res.status(422).json(err))
 })
 
 app.delete('/restaurant-list/:id', (req, res) => {
