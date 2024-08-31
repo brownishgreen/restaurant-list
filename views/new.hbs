@@ -1,38 +1,38 @@
 <div class="form-container">
   <div class="form-body">
     <div class="form-wrapper">
-      <form action="/restaurant-list/{{restaurant.id}}?_method=PUT" method="POST">
+      <form action="/restaurant-list" method="POST">
         <div class="mb-2">
           <label for="name" class="form-label">餐廳名稱</label>
-          <input type="text" class="form-control" id="name" name="name" value="{{restaurant.name}}">
+          <input type="text" class="form-control" id="name" name="name">
         </div>
         <div class="mb-2">
-          <label for="name" class="form-label">分類</label>
-          <input type="text" class="form-control" id="name" name="category" value="{{restaurant.category}}">
+          <label for="category" class="form-label">分類</label>
+          <input type="text" class="form-control" id="category" name="category">
         </div>
         <div class="mb-2">
           <label for="rating" class="form-label">評分</label>
-          <input type="text" class="form-control" id="rating" name="rating" value="{{restaurant.rating}}">
+          <input type="text" class="form-control" id="rating" name="rating">
         </div>
         <div class="mb-2">
           <label for="location" class="form-label">地址</label>
-          <input type="text" class="form-control" id="location" name="location" value="{{restaurant.location}}">
+          <input type="text" class="form-control" id="location" name="location">
         </div>
         <div class="mb-2">
           <label for="phone" class="form-label">電話</label>
-          <input type="text" class="form-control" id="phone" name="phone" value="{{restaurant.phone}}">
+          <input type="text" class="form-control" id="phone" name="phone">
         </div>
         <div class="mb-2">
           <label for="description" class="form-label">簡介</label>
-          <textarea class="form-control" id="description" name="description">{{restaurant.description}}</textarea>
+          <textarea class="form-control" id="description" name="description"></textarea>
         </div>
         <div class="mb-2">
           <label for="image" class="form-label">圖片連結</label>
-          <input class="form-control" id="image" name="image" value="{{restaurant.image}}">
+          <input class="form-control" id="image" name="image">
         </div>
         <button type="submit" class="btn btn-outline-success btn-sm">Save</button>
         <a href="/" class="btn btn-outline-secondary btn-sm">Back</a>
-
+      </form>
     </div>
   </div>
 </div>

@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
 
 app.get('/restaurant-list', (req, res) => {
   Restaurant.findAll({
-    attributes: ['id', 'name', 'category', 'image', 'rating', 'description'],
+    attributes: ['id', 'name', 'category', 'image', 'rating', 'description', 'rating'],
     raw: true
   })
     .then((restaurants) => {
@@ -32,6 +32,26 @@ app.get('/restaurant-list', (req, res) => {
     .catch((error) => {
       console.log(error)
     })
+})
+
+app.get('/restaurant-list/new', (req, res) => {
+  console.log('Rendering new.hbs')
+  res.render('new')
+})
+
+app.post('/restaurant-list', (req, res) => {
+  const body = req.body
+  return Restaurant.create({
+    name: body.name,
+    category: body.category,
+    rating: body.rating,
+    location: body.location,
+    phone: body.phone,
+    description: body.description,
+    image: body.image
+  })
+    .then(() => res.redirect('/restaurant-list'))
+    .catch((err) => console.log(err))
 })
 
 app.get('/restaurant-list/:id', (req, res) => {
@@ -43,9 +63,7 @@ app.get('/restaurant-list/:id', (req, res) => {
     .then((restaurant) => res.render('detail', { restaurant }))
     .catch((err) => res.status(422).json(err))
 })
-app.get('/restaurant-list/new', (req, res) => {
-  res.send('add restaurant')
-})
+
 
 app.get('/restaurant-list/:id/edit', (req, res) => {
   const id = req.params.id
@@ -66,7 +84,8 @@ app.put('/restaurant-list/:id', (req, res) => {
     location: body.location,
     phone: body.phone,
     description: body.description,
-    image: body.image
+    image: body.image,
+    rating: body.rating
   }, { where: { id } })
   .then(() => res.redirect(`/restaurant-list/${id}`))
 })
