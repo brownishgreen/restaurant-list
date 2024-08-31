@@ -1,5 +1,7 @@
 const express = require('express')
 const app = express()
+const methodOverride = require('method-override')
+app.use(methodOverride('_method'))
 const { engine } = require('express-handlebars')
 
 const port = 3000
@@ -12,6 +14,8 @@ app.set('view engine', '.hbs')
 app.set('views', './views')
 
 app.use(express.static('public'))
+app.use(express.urlencoded({ extended: true }))
+
 
 app.get('/', (req, res) => {
   res.redirect('/restaurant-list')
@@ -50,7 +54,21 @@ app.get('/restaurant-list/:id/edit', (req, res) => {
     raw: true
   })
     .then((restaurant) => res.render('edit', { restaurant }))
-  .catch((err)=> res.status(422).json(err))
+    .catch((err) => res.status(422).json(err))
+})
+
+app.put('/restaurant-list/:id', (req, res) => {
+  const body = req.body
+  const id = req.params.id
+
+  return Restaurant.update({
+    name: body.name,
+    location: body.location,
+    phone: body.phone,
+    description: body.description,
+    image: body.image
+  }, { where: { id } })
+  .then(() => res.redirect(`/restaurant-list/${id}`))
 })
 
 app.delete('/restaurant-list/:id', (req, res) => {
@@ -58,5 +76,5 @@ app.delete('/restaurant-list/:id', (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log(`App is running on http://localhost/${port}`)
+  console.log(`App is running on http://localhost:${port}`)
 })
