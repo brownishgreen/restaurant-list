@@ -11,11 +11,13 @@ router.get('/', (req, res, next) => {
 
   Restaurant.findAll({
     attributes: ['id', 'name', 'category', 'image', 'rating', 'description'],
+    offset: (page - 1) * limit,
+    limit,
     raw: true
   })
-    .then((restaurant) => {
+    .then((restaurants) => {
       res.render('index', {
-        restaurants: restaurant.slice((page - 1) * limit, page * limit),
+        restaurants,
         prev: page > 1 ? page - 1 : page,
         next: page + 1,
         page
