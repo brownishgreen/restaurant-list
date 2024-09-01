@@ -48,25 +48,35 @@ app.get('/restaurant-list', (req, res) => {
 
 app.get('/restaurant-list/new', (req, res) => {
   console.log('Rendering new.hbs')
-  res.render('new')
+  res.render('new', { error: req.flash('error')})
 })
 
 app.post('/restaurant-list', (req, res) => {
-  const body = req.body
-  return Restaurant.create({
-    name: body.name,
-    category: body.category,
-    rating: body.rating,
-    location: body.location,
-    phone: body.phone,
-    description: body.description,
-    image: body.image
-  })
-    .then(() => {
-      req.flash('success', '您成功新增了一間餐廳!')
-      res.redirect('/restaurant-list')
+  try {
+    const body = req.body
+    return Restaurant.create({
+      name: body.name,
+      category: body.category,
+      rating: body.rating,
+      location: body.location,
+      phone: body.phone,
+      description: body.description,
+      image: body.image
     })
-    .catch((err) => console.log(err))
+      .then(() => {
+        req.flash('success', '您成功新增了一間餐廳!')
+        res.redirect('/restaurant-list')
+      })
+      .catch((err) => {
+        console.log(err)
+        req.flash('error', '新增失敗!')
+        return res.redirect('back')
+      })
+  } catch (error) {
+    console.error(error)
+    req.flash('error', '新增失敗:(')
+    return res.redirect('back')
+  }
 })
 
 app.get('/restaurant-list/:id', (req, res) => {
@@ -81,13 +91,22 @@ app.get('/restaurant-list/:id', (req, res) => {
 
 
 app.get('/restaurant-list/:id/edit', (req, res) => {
-  const id = req.params.id
+  try {const id = req.params.id
   return Restaurant.findByPk(id, {
     attributes: ['id', 'name', 'category', 'rating', 'image', 'phone', 'location', 'description'],
     raw: true
   })
-    .then((restaurant) => res.render('edit', { restaurant }))
-    .catch((err) => res.status(422).json(err))
+    .then((restaurant) => res.render('edit', { restaurant, error: req.flash('error') }))
+    .catch((error) => {
+      console.error(error)
+      req.flash('error', '編輯失敗:(')
+      return res.redirect('back')
+    })
+  } catch (error) {
+    console.error(error)
+    req.flash('error', '編輯失敗:(')
+    return res.redirect('back')
+    }
 })
 
 app.put('/restaurant-list/:id', (req, res) => {
@@ -106,7 +125,13 @@ app.put('/restaurant-list/:id', (req, res) => {
       req.flash('success', '您已成功更新餐廳資訊!')
       res.redirect(`/restaurant-list/${id}`)
     })
+    .catch((err) => {
+      console.error(err)
+      req.flash('error', '更新失敗，請檢查輸入資料!')
+      res.redirect('back')
+    })
 })
+
 
 app.delete('/restaurant-list/:id', (req, res) => {
   const id = req.params.id
