@@ -14,7 +14,12 @@ router.get('/', (req, res, next) => {
     raw: true
   })
     .then((restaurant) => {
-      res.render('index', { restaurants : restaurant.slice((page - 1 )* limit , page * limit)})
+      res.render('index', {
+        restaurants: restaurant.slice((page - 1) * limit, page * limit),
+        prev: page > 1 ? page - 1 : page,
+        next: page + 1,
+        page
+      })
     })
     .catch((err) => {
       err.errorMessage = '資料取得失敗 ;('
