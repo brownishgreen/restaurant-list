@@ -4,16 +4,21 @@ const router = express.Router()
 const db = require('../models')
 const Restaurant = db.Restaurant
 
-router.get('/', (req, res) => {
+router.get('/', (req, res, next) => {
+
+  const page = parseInt(req.query.page) || 1
+  const limit = 6
+
   Restaurant.findAll({
     attributes: ['id', 'name', 'category', 'image', 'rating', 'description'],
     raw: true
   })
-    .then((restaurants) => {
-      res.render('index', { restaurants, error: req.flash('error') })
+    .then((restaurant) => {
+      res.render('index', { restaurants : restaurant.slice((page - 1 )* limit , page * limit)})
     })
-    .catch((error) => {
-      console.log(error)
+    .catch((err) => {
+      err.errorMessage = '資料取得失敗 ;('
+      next(err)
     })
 })
 

@@ -1,5 +1,5 @@
-module.exports = (error, req, res, next) => {
-  console.error(error)
-  req.flash('error', error.errorMessage || '處理失敗:(')
-  res.redirect('back')
+module.exports = (err, req, res, next) => {
+  req.flash('error', err.message);
+  res.redirect('back');
+  next(err)
 }
