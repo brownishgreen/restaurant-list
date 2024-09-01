@@ -6,11 +6,11 @@ const Restaurant = db.Restaurant
 
 router.get('/', (req, res) => {
   Restaurant.findAll({
-    attributes: ['id', 'name', 'category', 'image', 'rating', 'description', 'rating'],
+    attributes: ['id', 'name', 'category', 'image', 'rating', 'description'],
     raw: true
   })
     .then((restaurants) => {
-      res.render('index', { restaurants, message: req.flash('success') })
+      res.render('index', { restaurants, error: req.flash('error') })
     })
     .catch((error) => {
       console.log(error)
@@ -18,12 +18,10 @@ router.get('/', (req, res) => {
 })
 
 router.get('/new', (req, res) => {
-  console.log('Rendering new.hbs')
-  res.render('new', { error: req.flash('error') })
+  return res.render('new')
 })
 
-router.post('/', (req, res) => {
-  try {
+router.post('/', (req, res, next) => {
     const body = req.body
     return Restaurant.create({
       name: body.name,
@@ -39,15 +37,9 @@ router.post('/', (req, res) => {
         res.redirect('/restaurant-list')
       })
       .catch((err) => {
-        console.log(err)
-        req.flash('error', '新增失敗!')
-        return res.redirect('back')
+        err.errorMessage = '新增失敗!'
+        next(err)
       })
-  } catch (error) {
-    console.error(error)
-    req.flash('error', '新增失敗:(')
-    return res.redirect('back')
-  }
 })
 
 router.get('/:id', (req, res) => {
@@ -56,32 +48,26 @@ router.get('/:id', (req, res) => {
     attributes: ['id', 'name', 'category', 'image', 'phone', 'location', 'description'],
     raw: true
   })
-    .then((restaurant) => res.render('detail', { restaurant, message: req.flash('success') }))
+    .then((restaurant) => res.render('detail', { restaurant }))
     .catch((err) => res.status(422).json(err))
 })
 
 
-router.get('/:id/edit', (req, res) => {
-  try {
-    const id = req.params.id
-    return Restaurant.findByPk(id, {
-      attributes: ['id', 'name', 'category', 'rating', 'image', 'phone', 'location', 'description'],
-      raw: true
+router.get('/:id/edit', (req, res, next) => {
+  const id = req.params.id
+  return Restaurant.findByPk(id, {
+    attributes: ['id', 'name', 'category', 'rating', 'image', 'phone', 'location', 'description'],
+    raw: true
+  })
+    .then((restaurant) => res.render('edit', { restaurant, error: req.flash('error') }))
+    .catch((err) => {
+      error.errorMessage = '編輯失敗 :('
+      next(err)
     })
-      .then((restaurant) => res.render('edit', { restaurant, error: req.flash('error') }))
-      .catch((error) => {
-        console.error(error)
-        req.flash('error', '編輯失敗:(')
-        return res.redirect('back')
-      })
-  } catch (error) {
-    console.error(error)
-    req.flash('error', '編輯失敗:(')
-    return res.redirect('back')
-  }
 })
 
-router.put('/:id', (req, res) => {
+
+router.put('/:id', (req, res, next) => {
   const body = req.body
   const id = req.params.id
 
@@ -98,9 +84,8 @@ router.put('/:id', (req, res) => {
       res.redirect(`/restaurant-list/${id}`)
     })
     .catch((err) => {
-      console.error(err)
-      req.flash('error', '更新失敗，請檢查輸入資料!')
-      res.redirect('back')
+      err.errorMessage =  '更新失敗，請檢查輸入資料!'
+      next(err)
     })
 })
 
@@ -110,7 +95,12 @@ router.delete('/:id', (req, res) => {
   return Restaurant.destroy({ where: { id } })
     .then(() => {
       req.flash('success', '刪除餐廳成功！')
-      res.redirect('/')
+      console.log('刪除操作完成並設置了成功訊息')
+      res.redirect('/restaurant-list')
+    })
+    .catch((err) => {
+      err.errorMessage = '刪除失敗!'
+      next(err)
     })
 })
 
