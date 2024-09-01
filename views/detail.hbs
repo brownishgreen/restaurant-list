@@ -3,13 +3,15 @@
     <div class="col-12 col-md-10 mx-auto">
       <h1 class="mb-1 restaurant-show-title">{{restaurant.name}}</h1>
       <p class="mb-1">
+        {{#if message}}
+        <div>{{message}}</div>
+        {{/if}}
         <span class="text-secondary">
           <i class="fas fa-utensils pr-2"></i>
           類別：
         </span>
         {{restaurant.category}}
       </p>
-
       <p class="mb-1">
         <span class="text-secondary">
           <i class="fas fa-map-marker-alt pr-2"></i>
