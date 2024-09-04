@@ -8,9 +8,11 @@ router.get('/', (req, res, next) => {
 
   const page = parseInt(req.query.page) || 1
   const limit = 6
+  const userId = req.user.id
 
   Restaurant.findAll({
     attributes: ['id', 'name', 'category', 'image', 'rating', 'description'],
+    where: {userId} ,
     offset: (page - 1) * limit,
     limit,
     raw: true
@@ -34,7 +36,9 @@ router.get('/new', (req, res) => {
 })
 
 router.post('/', (req, res, next) => {
-    const body = req.body
+  const body = req.body
+  const userId = req.user.id
+
     return Restaurant.create({
       name: body.name,
       category: body.category,
@@ -42,7 +46,8 @@ router.post('/', (req, res, next) => {
       location: body.location,
       phone: body.phone,
       description: body.description,
-      image: body.image
+      image: body.image,
+      userId: userId
     })
       .then(() => {
         req.flash('success', '您成功新增了一間餐廳!')
@@ -56,11 +61,23 @@ router.post('/', (req, res, next) => {
 
 router.get('/:id', (req, res) => {
   const id = req.params.id
+  const userId = req.user.id
+
   return Restaurant.findByPk(id, {
-    attributes: ['id', 'name', 'category', 'image', 'phone', 'location', 'description'],
+    attributes: ['id', 'name', 'category', 'image', 'phone', 'location', 'description', 'userId'],
     raw: true
   })
-    .then((restaurant) => res.render('detail', { restaurant }))
+    .then((restaurant) => {
+      if (!restaurant) {
+        req.flash('error', '找不到資料')
+        return res.redirect('/restaurant-list')
+      }
+      if (restaurant.userId !== userId) {
+        req.flash('error', '權限不足')
+        return res.redirect('/restaurant')
+      }
+      res.render('detail', { restaurant })
+    })
     .catch((err) => res.status(422).json(err))
 })
 
@@ -82,6 +99,20 @@ router.get('/:id/edit', (req, res, next) => {
 router.put('/:id', (req, res, next) => {
   const body = req.body
   const id = req.params.id
+  const userId = req.user.id
+
+  return Restaurant.findByPk(id, {
+  attributes: ['name', 'location', 'phone', 'description', 'image', 'rating','userId']
+  })
+    .then((restaurant) => {
+      if (!restaurant) {
+        req.flash('error', '找不到資料')
+        return res.redirect('restaurant-list')
+      }
+      if (restaurant.id !== userId) {
+        req.flash('error', '權限不足')
+        return res.redirect('restaurant-list')
+      }
 
   return Restaurant.update({
     name: body.name,
@@ -100,20 +131,33 @@ router.put('/:id', (req, res, next) => {
       next(err)
     })
 })
-
+})
 
 router.delete('/:id', (req, res) => {
   const id = req.params.id
-  return Restaurant.destroy({ where: { id } })
-    .then(() => {
-      req.flash('success', '刪除餐廳成功！')
-      console.log('刪除操作完成並設置了成功訊息')
-      res.redirect('/restaurant-list')
-    })
-    .catch((err) => {
-      err.errorMessage = '刪除失敗!'
-      next(err)
-    })
+  const userId = req.user.id
+  
+  return Restaurant.findByPk(id)
+    .then((restaurant) => {
+      if (!restaurant) {
+        req.flash('error', '找不到資料')
+        return res.redirect('/restaurant-list')
+      }
+      if (restaurant.userId !== userId) {
+        req.flash('error', '權限不足')
+        return res.redirect('/restaurant-list')
+      }
+      return Restaurant.destroy({ where: { id } })
+        .then(() => {
+          req.flash('success', '刪除餐廳成功！')
+          console.log('刪除操作完成並設置了成功訊息')
+          res.redirect('/restaurant-list')
+        })
+        .catch((err) => {
+          err.errorMessage = '刪除失敗!'
+          next(err)
+        })
+  })
 })
 
 module.exports = router
