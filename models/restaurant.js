@@ -4,7 +4,7 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Restaurant extends Model {
     static associate(models) {
-      // define association here
+      Restaurant.belongsTo(models.User)
     }
   }
   Restaurant.init({
@@ -33,7 +33,11 @@ module.exports = (sequelize, DataTypes) => {
         max: 5
       }
     },
-    description: DataTypes.TEXT
+    description: DataTypes.TEXT,
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'Restaurant',
