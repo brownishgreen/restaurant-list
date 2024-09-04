@@ -1,0 +1,20 @@
+<div class="form-container">
+  <div class="form-body">
+    <div class="form-wrapper">
+      {{> message}}
+      <form action="/login" method="POST">
+        <div class="mb-2">
+          <label for="email" class="form-label">E-mail (登入帳號)</label>
+          <input type="text" class="form-control" id="email" name="email">
+        </div>
+        <div class="mb-2">
+          <label for="password" class="form-label">密碼</label>
+          <input type="text" class="form-control" id="password" name="password">
+        </div>
+        <p>還沒有帳號嗎？<a href="/register">註冊</a></p>
+        <button type="submit" class="btn btn-outline-success ">登入</button>
+        <button type="submit" class="btn btn-outline-primary ">以 Facebook 帳號登入</button>
+
+    </div>
+  </div>
+</div>
