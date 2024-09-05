@@ -6,10 +6,13 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const { engine } = require('express-handlebars');
 const methodOverride = require('method-override');
+
 const router = require('./routes');
+const passport = require('./config/passport')
+
 const messageHandler = require('./middlewares/message-handler');
 const errorHandler = require('./middlewares/error-handler');
-const passport = require('passport')
+
 
 
 if (process.env.NODE_ENV !== 'production') {
