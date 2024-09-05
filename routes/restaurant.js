@@ -109,7 +109,7 @@ router.put('/:id', (req, res, next) => {
         req.flash('error', '找不到資料')
         return res.redirect('restaurant-list')
       }
-      if (restaurant.id !== userId) {
+      if (restaurant.userId !== userId) {
         req.flash('error', '權限不足')
         return res.redirect('restaurant-list')
       }
