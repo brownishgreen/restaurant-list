@@ -107,11 +107,11 @@ router.put('/:id', (req, res, next) => {
     .then((restaurant) => {
       if (!restaurant) {
         req.flash('error', '找不到資料')
-        return res.redirect('restaurant-list')
+        return res.redirect('/restaurant-list')
       }
       if (restaurant.userId !== userId) {
         req.flash('error', '權限不足')
-        return res.redirect('restaurant-list')
+        return res.redirect('/restaurant-list')
       }
 
   return Restaurant.update({
@@ -148,15 +148,15 @@ router.delete('/:id', (req, res) => {
         return res.redirect('/restaurant-list')
       }
       return Restaurant.destroy({ where: { id } })
-        .then(() => {
-          req.flash('success', '刪除餐廳成功！')
-          console.log('刪除操作完成並設置了成功訊息')
-          res.redirect('/restaurant-list')
-        })
-        .catch((err) => {
-          err.errorMessage = '刪除失敗!'
-          next(err)
-        })
+    .then(() => {
+      req.flash('success', '刪除餐廳成功！')
+      console.log('刪除操作完成並設置了成功訊息')
+      res.redirect('/restaurant-list')
+    })
+    .catch((err) => {
+      err.errorMessage = '刪除失敗!'
+      next(err)
+    })
   })
 })
 
