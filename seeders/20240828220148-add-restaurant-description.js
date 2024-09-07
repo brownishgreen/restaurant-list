@@ -14,13 +14,13 @@ module.exports = {
       google_map: restaurant.google_map,
       rating: restaurant.rating,
       description: restaurant.description, 
-      createdAt: new Date(), 
-      updatedAt: new Date()   
+      userId: restaurant.userId,
+      created_at: new Date(), 
+      updated_at: new Date()   
     })), {});
   },
 
   async down(queryInterface, Sequelize) {
     await queryInterface.bulkDelete('restaurants', null, {});
-    console.error("Error inserting seed data:", err);
   }
 };
