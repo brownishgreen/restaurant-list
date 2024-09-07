@@ -30,31 +30,6 @@
 Node.js
 MySQL 
 
-## 資料庫設定
-
-此專案包含三個 SQL dump 檔案，分別為：
-
-1. `restaurant_Restaurants.sql` - 餐廳資料表
-2. `restaurant_Users.sql` - 使用者資料表
-3. `restaurant_SequelizeMeta.sql` - Sequelize metadata 表
-
-## 資料庫還原步驟：
-
-1. 在 MySQL 中建立新的資料庫：
-   ```sql
-   CREATE DATABASE restaurant_db;
-   ```
-
-2. 使用以下指令來導入這三個 `.sql` 檔案：
-   ```bash
-   mysql -u [使用者名稱] -p restaurant_db < path/to/sql-dumps/restaurant_Restaurants.sql
-   mysql -u [使用者名稱] -p restaurant_db < path/to/sql-dumps/restaurant_Users.sql
-   mysql -u [使用者名稱] -p restaurant_db < path/to/sql-dumps/restaurant_SequelizeMeta.sql
-   ```
-
-這樣，資料庫應該會正確重建，並可以用於測試專案。
-
-
 ## Tools
 
 - 開發環境：Visual Studio Code
