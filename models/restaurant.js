@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     name: {
       type: DataTypes.STRING,
-      allowNull: false // 确保此字段不能为空
+      allowNull: false 
     },
     name_en: DataTypes.STRING,
     category: {
@@ -44,5 +44,5 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'Restaurants',
     timestamps: true
   });
-  return Restaurant;
-};
+  return Restaurant
+}
