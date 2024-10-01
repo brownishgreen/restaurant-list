@@ -3,7 +3,7 @@ const restaurants = require('./restaurant.json').results
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.bulkInsert('restaurants', restaurants.map(restaurant => ({
+    await queryInterface.bulkInsert('Restaurants', restaurants.map(restaurant => ({
       id: restaurant.id, 
       name: restaurant.name,
       name_en: restaurant.name_en,
