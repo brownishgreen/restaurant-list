@@ -1,5 +1,5 @@
 # Restaurant List
-![封面截圖](/public/image/restaurant-list.png)
+
 運用 Node.js 建立本機伺服器，並透過 Express 與 Template Engine (Handlebars) 建立簡易的餐廳清單網頁。
 - 於 Dev C4後端 M1 指標作業 中加入資料庫（MySQL）以及 CRUD 的應用。
 - 於 Dev C4後端 M2 指標作業 中加入分頁功能，以及 middlewares 應用。
